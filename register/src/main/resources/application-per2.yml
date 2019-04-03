@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: register
+server:
+  port: 8002
+eureka:
+  instance:
+    hostname: per2
+  client:
+    service-url:
+      defaultZone: http://per1:8001/
