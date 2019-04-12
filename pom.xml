@@ -21,6 +21,7 @@
         <module>register</module>
         <module>service-ribbon</module>
         <module>serice-feign</module>
+        <module>cycle-util</module>
     </modules>
 
     <properties>
