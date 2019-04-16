@@ -1,8 +1,12 @@
 package cn.lianrf.utils.poi;
 
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -175,5 +179,48 @@ public abstract class PoiUtils {
         cellStyle.setFillForegroundColor(green.getIndex());
         cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         return cellStyle;
+    }
+    /**
+     * 获得或创建sheet
+     * @param workbook
+     * @param sheetName sheet名称
+     * @return
+     */
+    public static Sheet getOrCreateSheet(Workbook workbook,String sheetName) {
+        Sheet sheet = workbook.getSheet(sheetName);
+        if (sheet == null) {
+            sheet = workbook.createSheet(sheetName);
+        }
+        return sheet;
+    }
+
+    /**
+     * 设置边框
+     * @param cellStyle
+     * @return
+     */
+    public static CellStyle setBorder(CellStyle cellStyle){
+        //下边框
+        cellStyle.setBorderBottom(BorderStyle.THIN);
+        //左边框
+        cellStyle.setBorderLeft(BorderStyle.THIN);
+        //上边框
+        cellStyle.setBorderTop(BorderStyle.THIN);
+        //右边框
+        cellStyle.setBorderRight(BorderStyle.THIN);
+        return cellStyle;
+    }
+
+    public static void saveExcel(Workbook wb,String filepath) {
+        FileOutputStream fileOut;
+        try {
+            fileOut = new FileOutputStream(filepath);
+            wb.write(fileOut);
+            fileOut.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -22,6 +22,7 @@
         <module>service-ribbon</module>
         <module>serice-feign</module>
         <module>cycle-util</module>
+        <module>zuul</module>
     </modules>
 
     <properties>
