@@ -1,5 +1,6 @@
 package cn.lianrf;
 
+import cn.lianrf.utils.bean.BeanMap;
 import cn.lianrf.utils.poi.PoiUtils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -11,6 +12,9 @@ import org.apache.poi.ss.usermodel.Row;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @version: v1.0
@@ -19,6 +23,40 @@ import java.time.LocalTime;
  */
 public class s {
     public static void main(String[] args) {
+        Aa aa = new Aa("1", Arrays.asList("hehe","xixi"));
+        Bb bb = new Bb();
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("s1","b1");
+        map.put("s2","b2");
+        try {
+            BeanMap.map(aa,bb,map);
+            System.out.println();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+    }
+    static class Aa{
+        private String s1;
+        private List<String> s2;
+
+        public Aa(String s1, List<String> s2) {
+            this.s1 = s1;
+            this.s2 = s2;
+        }
+    }
+
+    static class Bb{
+        private String b1;
+        private List<String> b2;
+
+
+    }
+
+    private static void test2() {
         //获取当前时间  含有毫秒值  17:18:41.571
         LocalTime now = LocalTime.now();
         System.out.println(now);
