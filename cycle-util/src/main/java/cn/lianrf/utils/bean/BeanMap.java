@@ -23,18 +23,25 @@ public abstract class BeanMap {
      *
      * @param sourceBean 原Bean
      * @param targetBean 目标Bean
-     * @param map 映射 key:原Bean字段；value：目标Bean字段
+     * @param maps 映射 key:原Bean字段；value：目标Bean字段
      */
-    public static void map(Object sourceBean, Object targetBean, Map<String,String> map) throws NoSuchFieldException, IllegalAccessException {
+    public static void map(Object sourceBean, Object targetBean, Map<String,String> maps) throws IllegalAccessException {
         Class<?> sourceClass = sourceBean.getClass();
         Class<?> targetClass = targetBean.getClass();
-        for (Map.Entry<String, String> entry : map.entrySet()) {
+        for (Map.Entry<String, String> entry : maps.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
 
-            Field sourceField = sourceClass.getDeclaredField(key);
+            Field sourceField = getFieldRecursion(sourceClass,key);
+            if(sourceField==null){
+                continue;
+            }
             sourceField.setAccessible(true);
-            Field targetField = targetClass.getDeclaredField(value);
+
+            Field targetField= getFieldRecursion(targetClass,value);
+            if(targetField==null){
+                continue;
+            }
             targetField.setAccessible(true);
 
             Class<?> sourceFieldType = sourceField.getType();
@@ -43,7 +50,33 @@ public abstract class BeanMap {
             if(sourceFieldType.equals(targetFieldType)){
                 targetField.set(targetBean,sourceField.get(sourceBean));
             }
+            if(sourceFieldType.isAssignableFrom(List.class)
+                    &&targetFieldType.isAssignableFrom(String.class)){
+                List list = (List) sourceField.get(sourceBean);
+                if(list!=null&&list.size()>0){
+                    targetField.set(targetBean,list.get(0));
+                }
+            }
         }
+    }
+
+    /**
+     * 递归获得字段
+     * @param clzz
+     * @param filedName
+     * @return
+     */
+    private static Field getFieldRecursion(Class clzz,String filedName){
+        try {
+            Field declaredField = clzz.getDeclaredField(filedName);
+            return declaredField;
+        } catch (NoSuchFieldException e) {
+            Class superclass = clzz.getSuperclass();
+            if(superclass!=null){
+                return getFieldRecursion(superclass,filedName);
+            }
+        }
+        return null;
     }
 
     /**
