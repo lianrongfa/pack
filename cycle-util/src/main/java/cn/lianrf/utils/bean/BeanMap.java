@@ -105,6 +105,7 @@ public abstract class BeanMap {
                     e.printStackTrace();
                 }
             }
+            //判定此 Class 对象所表示的类或接口与指定的 Class 参数所表示的类或接口是否相同，或是否是其超类或超接口
             if (type.isAssignableFrom(List.class)) {
                 ParameterizedTypeImpl genericType = (ParameterizedTypeImpl) field.getGenericType();
                 Type[] args = genericType.getActualTypeArguments();
