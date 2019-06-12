@@ -1,5 +1,6 @@
 package cn.lianrf.utils.File;
 
+import com.sun.istack.internal.Nullable;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -22,7 +23,7 @@ public class FileDowload {
      * @return
      * @throws IOException
      */
-    public static ResponseEntity<InputStreamResource> dowloadTemplate(String fileName) throws IOException {
+    public static ResponseEntity<InputStreamResource> dowloadTemplate(String fileName,@Nullable String fileDir) throws IOException {
         ClassPathResource file = new ClassPathResource("template/"+fileName);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
