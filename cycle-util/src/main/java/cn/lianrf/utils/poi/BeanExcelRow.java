@@ -107,8 +107,8 @@ public class BeanExcelRow<T> {
     }
 
     public static void main(String[] args) {
-        try {
-            Workbook workbook = WorkbookFactory.create(new File("C:\\Users\\86180\\Desktop\\model\\code\\sibr\\java\\src\\main\\resources\\template\\人才招聘(模板).xlsx"));
+
+            Workbook workbook = null;//WorkbookFactory.create(new File("C:\\Users\\86180\\Desktop\\model\\code\\sibr\\java\\src\\main\\resources\\template\\人才招聘(模板).xlsx"));
             Sheet sheetAt = workbook.getSheetAt(0);
 
             Row row = sheetAt.getRow(1);
@@ -120,21 +120,11 @@ public class BeanExcelRow<T> {
             hashMap.put(3,"workAddress");
             hashMap.put(4,"responsibility");
             hashMap.put(5,"qualification");
-            BeanExcelRow<?> recruitBeanExcelRow = new BeanExcelRow<?>(hashMap);
+            BeanExcelRow<?> recruitBeanExcelRow = new BeanExcelRow(hashMap);
 
-            recruitBeanExcelRow.rowMap(row,Recruit.class);
+            //recruitBeanExcelRow.rowMap(row,Recruit.class);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InvalidFormatException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
+
 
     }
 }

@@ -2,8 +2,16 @@ package cn.lianrf.utils.date;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.YearMonth;
+import java.time.chrono.ChronoPeriod;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAmount;
+import java.time.temporal.TemporalField;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -88,11 +96,23 @@ public abstract class DateUtils {
     }
 
     public static void main(String[] args) {
-        SimpleDateFormat yyyyMM = new SimpleDateFormat("yyyyMM");
-        try {
-            System.out.println(getWeekendInMonth(yyyyMM.parse("201904").getTime()));;
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
     }
+
+
+    /**
+     * 获取当前系统时间最近12月的年月（含当月）
+     * 2018-04~2019-03
+     */
+    public static List<String> getLatest12Month(){
+        YearMonth month = YearMonth.now();
+        ArrayList<String> monthsStr = new ArrayList<>();
+        monthsStr.add(month.toString());
+        for (int i = 0; i <11 ; i++) {
+            month= month.minus(Period.ofMonths(1));
+            monthsStr.add(month.toString());
+        }
+        return monthsStr;
+    }
+
 }

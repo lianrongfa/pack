@@ -4,11 +4,9 @@ import org.apache.commons.lang.RandomStringUtils;
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  *
@@ -134,5 +132,45 @@ public abstract class BeanMap {
             }
 
         }
+    }
+
+    /**
+     * Map转成实体对象
+     *
+     * @param map   map实体对象包含属性
+     * @param clazz 实体对象类型
+     * @return
+     */
+    public static <T> T mapToObject(Map<String, Object> map, Class<T> clazz) {
+        if (map == null) {
+            return null;
+        }
+        T obj = null;
+        try {
+            obj = clazz.newInstance();
+
+            Field[] fields = obj.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                int mod = field.getModifiers();
+                if (Modifier.isStatic(mod) || Modifier.isFinal(mod)) {
+                    continue;
+                }
+                field.setAccessible(true);
+                String filedTypeName = field.getType().getName();
+                if (filedTypeName.equalsIgnoreCase("java.util.date")) {
+                    String datetimestamp = String.valueOf(map.get(field.getName()));
+                    if (datetimestamp.equalsIgnoreCase("null")) {
+                        field.set(obj, null);
+                    } else {
+                        field.set(obj, new Date(Long.parseLong(datetimestamp)));
+                    }
+                } else {
+                    field.set(obj, map.get(field.getName()));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return obj;
     }
 }

@@ -22,21 +22,17 @@ import java.util.List;
  * @author: lianrf
  */
 public class s {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IllegalAccessException {
         Aa aa = new Aa("1", Arrays.asList("hehe","xixi"));
         Bb bb = new Bb();
 
         HashMap<String, String> map = new HashMap<>();
         map.put("s1","b1");
         map.put("s2","b2");
-        try {
+
             BeanMap.map(aa,bb,map);
             System.out.println();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+
 
     }
     static class Aa{
