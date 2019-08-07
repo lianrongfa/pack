@@ -24,7 +24,6 @@ import java.util.Optional;
  * {@link #export(List, String, HttpServletResponse)}
  *
  */
-@Slf4j
 public abstract class ExcelUtil {
 
     /**
