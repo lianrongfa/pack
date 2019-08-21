@@ -23,6 +23,7 @@
         <module>serice-feign</module>
         <module>cycle-util</module>
         <module>zuul</module>
+        <module>gateway</module>
     </modules>
 
     <properties>
