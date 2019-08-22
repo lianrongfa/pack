@@ -1,4 +1,4 @@
-package cn.lianrf.utils.File;
+package cn.lianrf.utils.file;
 
 import com.sun.istack.internal.Nullable;
 import org.springframework.core.io.ClassPathResource;
