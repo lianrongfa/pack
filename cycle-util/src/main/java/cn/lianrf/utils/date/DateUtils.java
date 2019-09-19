@@ -24,8 +24,8 @@ public abstract class DateUtils {
 
     /**
      * 获取两个月份之间的月份集合
-     * @param minDate 开始月份
-     * @param maxDate  结束月份
+     * @param minDate 开始月份 201901
+     * @param maxDate 结束月份 201903
      * @return
      * @throws ParseException
      */
@@ -53,7 +53,7 @@ public abstract class DateUtils {
 
     /**
      * 获得一个月中的所有周六周天
-     * @param month
+     * @param month long形时间戳
      * @return
      */
     public static List<Integer> getWeekendInMonth(Long month) {
@@ -77,6 +77,11 @@ public abstract class DateUtils {
 
     /**
      * 获取两个日期字符串之间的日期集合
+     *
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     * @param calendar calendar
+     * @return
      */
     public static List<String> getBetweenDate(Long startTime, Long endTime, Calendar calendar) {
         // 声明保存日期集合
@@ -95,9 +100,6 @@ public abstract class DateUtils {
         return list;
     }
 
-    public static void main(String[] args) {
-
-    }
 
 
     /**

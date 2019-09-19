@@ -124,7 +124,5 @@ public class BeanExcelRow<T> {
 
             //recruitBeanExcelRow.rowMap(row,Recruit.class);
 
-
-
     }
 }

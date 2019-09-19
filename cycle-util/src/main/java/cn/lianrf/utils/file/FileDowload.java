@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.net.URLEncoder;
 
 /**
+ * 文件下载
+ *
  * @version: v1.0
  * @date: 2019/6/10
  * @author: lianrf
@@ -18,7 +20,9 @@ import java.net.URLEncoder;
 public class FileDowload {
 
     /**
+     * 静态文件下载，在resource下的template文件夹下下载对应文件名的文件
      * springboot文件下载
+     *
      * @param fileName 文件名
      * @return
      * @throws IOException

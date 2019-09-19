@@ -1,6 +1,5 @@
 package cn.lianrf.utils.ckeditor.util;
 
-import com.drcnet.response.exception.InvalidException;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
