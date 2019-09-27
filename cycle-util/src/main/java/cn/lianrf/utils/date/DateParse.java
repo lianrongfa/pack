@@ -1,5 +1,7 @@
 package cn.lianrf.utils.date;
 
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
@@ -16,7 +18,7 @@ import java.util.regex.Pattern;
  * @date: 2019/4/10
  * @author: lianrf
  */
-
+@Slf4j
 public class DateParse {
 
     private static DateTimeFormatter outFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -40,11 +42,11 @@ public class DateParse {
         //eg:20180608
         regexs.put(Pattern.compile("^[1-2][\\d]{3}[0|1][0-9][0-3][0-9]$"),
                 DateTimeFormatter.ofPattern("yyyyMMdd"));
-        //eg:2019年09月27日
-        regexs.put(Pattern.compile("^[1-2][\\d]{3}年[0|1][0-9]月[0-3][0-9]日$"),
+        //eg:2019年09月27日2018年11月5日
+        regexs.put(Pattern.compile("^[1-2][\\d]{3}年[0|1][0-9]月([0-3][0-9]|[1-9])日$"),
                 DateTimeFormatter.ofPattern("yyyy年MM月dd日"));
         //eg:2019年9月27日
-        regexs.put(Pattern.compile("^[1-2][\\d]{3}年[1-9]?[1-2]?月[0-3][0-9]日$"),
+        regexs.put(Pattern.compile("^[1-2][\\d]{3}年[1-9]?[1-2]?月([0-3][0-9]|[1-9])日$"),
                 DateTimeFormatter.ofPattern("yyyy年M月dd日"));
     }
 
@@ -80,15 +82,19 @@ public class DateParse {
                 dateStr = dateStrArray[1];
             }
         }
-
+        boolean b=true;
         for (Map.Entry<Pattern, DateTimeFormatter> entry : regexs.entrySet()) {
             Pattern pattern = entry.getKey();
             Matcher matcher = pattern.matcher(dateStr);
             if (matcher.matches()) {
+                b=false;
                 DateTimeFormatter inFormatter = entry.getValue();
                 LocalDate localDate = LocalDate.parse(dateStr, inFormatter);
                 return localDate;
             }
+        }
+        if(b){
+            log.warn("DateParse警告,数据:{}未匹配到正则，请更新正则库",dateStr);
         }
         return null;
     }
