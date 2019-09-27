@@ -9,8 +9,8 @@ public class StringWordUtil {
 
     /**
      * 每个单词首字母大写
-     * @param str 字符串
-     * @return 首字母大写
+     * @param str 字符串 test name
+     * @return 首字母大写 Test Name
      */
     public static String toUpperFirstCode(String str) {
         String[] strs = str.split(" ");

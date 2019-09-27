@@ -3,6 +3,7 @@ package cn.lianrf.utils.reflect;
 import com.google.common.collect.Lists;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -36,5 +37,22 @@ public class FieldUtil {
             getDeclaredField(clazz.getSuperclass(), fields);
         }
         return fields;
+    }
+
+    /***
+     * 根据属性获取对象属性值，通过get方法
+     * @param fieldName
+     * @param target
+     * @return
+     */
+    public static Object getFieldValueByName(String fieldName, Object target) {
+        try {
+            String e = fieldName.substring(0, 1).toUpperCase();
+            String getter = "get" + e + fieldName.substring(1);
+            Method method = target.getClass().getMethod(getter);
+            return method.invoke(target);
+        } catch (Exception var6) {
+            return null;
+        }
     }
 }

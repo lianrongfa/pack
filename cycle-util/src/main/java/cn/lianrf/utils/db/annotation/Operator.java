@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Operator {
     String EQUALS="=";
-    String No_EQUALS="!=";
+    String NO_EQUALS ="!=";
     String LT="<";
     String GT=">";
     String LTE="<=";

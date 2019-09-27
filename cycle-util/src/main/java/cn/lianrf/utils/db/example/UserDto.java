@@ -18,6 +18,10 @@ public class UserDto {
     @Operator(Operator.IN)
     private List<String> ids;
 
-    private String test;
+    @Operator
+    private String testName="1231";
 
+    public String getTestName() {
+        return "ggggg";
+    }
 }
