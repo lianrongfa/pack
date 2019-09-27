@@ -42,10 +42,10 @@ public class DateParse {
         //eg:20180608
         regexs.put(Pattern.compile("^[1-2][\\d]{3}[0|1][0-9][0-3][0-9]$"),
                 DateTimeFormatter.ofPattern("yyyyMMdd"));
-        //eg:2019年09月27日2018年11月5日
+        //eg:2019年09月27日 2018年11月5日
         regexs.put(Pattern.compile("^[1-2][\\d]{3}年[0|1][0-9]月([0-3][0-9]|[1-9])日$"),
                 DateTimeFormatter.ofPattern("yyyy年MM月dd日"));
-        //eg:2019年9月27日
+        //eg:2019年9月27日 2018年11月5日
         regexs.put(Pattern.compile("^[1-2][\\d]{3}年[1-9]?[1-2]?月([0-3][0-9]|[1-9])日$"),
                 DateTimeFormatter.ofPattern("yyyy年M月dd日"));
     }
