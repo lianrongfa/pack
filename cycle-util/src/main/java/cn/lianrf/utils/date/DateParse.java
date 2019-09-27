@@ -25,13 +25,6 @@ public class DateParse {
         this.outFormatter = outFormatter;
     }
 
-    public DateParse() {
-    }
-
-    public DateParse(DateTimeFormatter outFormatter) {
-        this.outFormatter = outFormatter;
-    }
-
     private static Map<Pattern, DateTimeFormatter> regexs = new HashMap<>();
 
     static {
@@ -58,12 +51,25 @@ public class DateParse {
 
 
     /**
-     * 字符串日期解析，返回日期格式
+     *
      *
      * @param dateStr 某种格式字符串日期
-     * @return yyyy-MM-dd 日期
+     * @return yyyyMMdd 默认
      */
-    public static Integer parse(String dateStr){
+    public static Integer parseInt(String dateStr){
+        LocalDate localDate = doParse(dateStr);
+        if(localDate==null){
+            return null;
+        }
+        return Integer.parseInt(localDate.format(outFormatter));
+    }
+
+    /**
+     * 字符串日期解析，返回日期格式 LocalDate
+     * @param dateStr 某种格式字符串日期
+     * @return LocalDate
+     */
+    private static LocalDate doParse(String dateStr) {
         if (StringUtils.isEmpty(dateStr)) {
             return null;
         }
@@ -81,16 +87,16 @@ public class DateParse {
             if (matcher.matches()) {
                 DateTimeFormatter inFormatter = entry.getValue();
                 LocalDate localDate = LocalDate.parse(dateStr, inFormatter);
-                return Integer.parseInt(localDate.format(outFormatter));
+                return localDate;
             }
         }
         return null;
     }
 
 
-    public static void main(String[] args){
+    public static void main1(String[] args){
         String s = "Monday December 10, 2012";
-        System.out.println(DateParse.parse(s));
+        System.out.println(DateParse.parseInt(s));
 
     }
 
