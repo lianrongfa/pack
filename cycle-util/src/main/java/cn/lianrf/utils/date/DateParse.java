@@ -23,8 +23,8 @@ public class DateParse {
 
     private static DateTimeFormatter outFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-    public void setOutFormatter(DateTimeFormatter outFormatter) {
-        this.outFormatter = outFormatter;
+    public static void setOutFormatter(DateTimeFormatter outFormatter) {
+        DateParse.outFormatter = outFormatter;
     }
 
     private static Map<Pattern, DateTimeFormatter> regexs = new HashMap<>();
@@ -42,12 +42,24 @@ public class DateParse {
         //eg:20180608
         regexs.put(Pattern.compile("^[1-2][\\d]{3}[0|1][0-9][0-3][0-9]$"),
                 DateTimeFormatter.ofPattern("yyyyMMdd"));
-        //eg:2019年09月27日 2018年11月5日
+        //eg:2019年09月27日2018年11月5日 2018年11月9日
         regexs.put(Pattern.compile("^[1-2][\\d]{3}年[0|1][0-9]月([0-3][0-9]|[1-9])日$"),
-                DateTimeFormatter.ofPattern("yyyy年MM月dd日"));
-        //eg:2019年9月27日 2018年11月5日
+                DateTimeFormatter.ofPattern("yyyy年M月d日"));
+        //eg:2019年9月27日 2019年5月13日
         regexs.put(Pattern.compile("^[1-2][\\d]{3}年[1-9]?[1-2]?月([0-3][0-9]|[1-9])日$"),
-                DateTimeFormatter.ofPattern("yyyy年M月dd日"));
+                DateTimeFormatter.ofPattern("yyyy年M月d日"));
+        //eg:2019年9月7日
+        regexs.put(Pattern.compile("^(1|2){1}[\\d]{3}-(1){0,1}[0-9]{1}-(1|2|3){0,1}[0-9]{1}$"),
+                DateTimeFormatter.ofPattern("yyyy-M-d"));
+        //eg:2019-09-27
+        regexs.put(Pattern.compile("^(1|2){1}[\\d]{3}-(0|1){1}[0-9]{1}-[0-3]{1}[0-9]{1}$"),
+                DateTimeFormatter.ofPattern("yyyy-M-d"));
+        //eg:2019-9-27
+        regexs.put(Pattern.compile("^(1|2){1}[\\d]{3}-(1){0,1}[0-9]{1}-(1|2|3){0,1}[0-9]{1}$"),
+                DateTimeFormatter.ofPattern("yyyy-M-d"));
+        //eg:2019/03/15
+        regexs.put(Pattern.compile("^[1-2][\\d]{3}/[0|1][0-9]/([0-3][0-9]|[1-9])$"),
+                DateTimeFormatter.ofPattern("yyyy/M/d"));
     }
 
 
@@ -89,8 +101,13 @@ public class DateParse {
             if (matcher.matches()) {
                 b=false;
                 DateTimeFormatter inFormatter = entry.getValue();
-                LocalDate localDate = LocalDate.parse(dateStr, inFormatter);
-                return localDate;
+                try{
+                    System.out.println(entry.getKey());
+                    LocalDate parse = LocalDate.parse(dateStr, inFormatter);
+                    return parse;
+                } catch (Exception e){
+                    log.error("DateParsec错误",e);
+                }
             }
         }
         if(b){
@@ -100,8 +117,8 @@ public class DateParse {
     }
 
 
-    public static void main1(String[] args){
-        String s = "Monday December 10, 2012";
+    public static void main(String[] args){
+        String s = "2015年4月2日";
         System.out.println(DateParse.parseInt(s));
 
     }

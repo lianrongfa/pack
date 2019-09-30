@@ -29,4 +29,8 @@ public class Test {
         System.out.println(format.format(date));
 
     }
+
+    private static void test2(){
+
+    }
 }
