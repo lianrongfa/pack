@@ -9,9 +9,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
 
 import javax.persistence.Column;
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * @version: v1.0
@@ -19,24 +19,20 @@ import java.util.Map;
  * @author: lianrf
  */
 public class BuilderMongoCriteria extends BaseCriteria {
-
-    private static Map<String, Object> operatorCriteria = new HashMap<String, Object>();
-
-    static {
-        operatorCriteria.put(Operator.EQUALS, null);
-        operatorCriteria.put(Operator.IN, null);
-        operatorCriteria.put(Operator.GT, null);
-        operatorCriteria.put(Operator.GTE, null);
-        operatorCriteria.put(Operator.LT, null);
-        operatorCriteria.put(Operator.LTE, null);
-        operatorCriteria.put(Operator.NO_EQUALS, null);
-        operatorCriteria.put(Operator.NOT_IN, null);
-    }
-
-    public <T> BuilderMongoCriteria(T t) {
+    /**
+     * @param t
+     * @param <T>
+     */
+    private <T> BuilderMongoCriteria(T t) {
         super(t);
     }
 
+    /**
+     *
+     * @param t
+     * @param <T>
+     * @return
+     */
     public static <T> BuilderMongoCriteria of(T t) {
         return new BuilderMongoCriteria(t);
     }
@@ -45,22 +41,35 @@ public class BuilderMongoCriteria extends BaseCriteria {
         Criteria criteria = new Criteria();
         Class clazz = getClazz();
         List<Field> fields = getFields();
+        //用来标记field
+        HashSet<Field> mark = new HashSet<>();
         for (Field field : fields) {
             Operator operator = field.getDeclaredAnnotation(Operator.class);
+            if(mark.contains(field)){continue;}
             if (operator != null) {
                 String operaName = operator.value();
-
-                if ("".equals(operaName)) continue;
+                if ("".equals(operaName)) {continue;}
                 //处理字段名
                 String fieldName = null;
                 Column column = field.getDeclaredAnnotation(Column.class);
                 if (column != null) {
                     fieldName = column.name();
+                    List<Field> list = FieldUtil.getFieldByColumn(column.name(), clazz, getFields());
+                    //size==2 说明查询为范围查询，因为mongo的范围查询需要单独处理
+                    if(list.size()==2){
+                        List<Field> tempList = list.stream().filter(item -> !item.equals(field)).collect(Collectors.toList());
+                        Field temp = tempList.get(0);
+                        mark.add(temp);
+                        Operator tempOperator = temp.getDeclaredAnnotation(Operator.class);
+                        Objects.requireNonNull(tempOperator,"相同Column的Operator不能为空");
+
+                    }else if (list.size()>2){
+                        throw new RuntimeException("如有多个相同名称column，请用数组或集合");
+                    }
                 } else {
                     fieldName = fieldNaming.getFieldName(field.getName());
                 }
                 Object value = FieldUtil.getFieldValueByName(field.getName(), getTarget());
-
             }
 
         }
@@ -70,40 +79,13 @@ public class BuilderMongoCriteria extends BaseCriteria {
 
     public static void main(String[] args) throws IllegalAccessException {
         BuilderMongoCriteria.of(new UserDto()).createCriteria();
+
         UserDto userDto = new UserDto();
         Object testName = FieldUtil.getFieldValueByName("testName", userDto);
         System.out.println(testName);
 
+
     }
 
-    enum OperatorCriteria {
-        EQUALS() {
 
-        },
-        NO_EQUALS() {
-
-        },
-        LT() {
-
-        },
-        GT() {
-
-        },
-        LTE() {
-
-        },
-        GTE() {
-
-        },
-        IN() {
-
-        },
-        NOT_IN() {
-
-        };
-
-        public Criteria operator(Criteria criteria,String fieldName,Object value) {
-            return criteria.and(fieldName).is(value);
-        }
-    }
 }

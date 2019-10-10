@@ -2,6 +2,8 @@ import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * @version: v1.0
@@ -9,6 +11,11 @@ import java.util.TimeZone;
  * @author: lianrf
  */
 public class Test {
+
+    public Test(String s) {
+
+    }
+
     public static void main(String[] args) {
         test1();
     }
@@ -28,6 +35,14 @@ public class Test {
         format.setTimeZone(TimeZone.getDefault());
         System.out.println(format.format(date));
 
+    }
+
+    private String s;
+
+
+
+    public String mm(String s){
+        return null;
     }
 
     private static void test2(){

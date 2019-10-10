@@ -3,6 +3,7 @@ package cn.lianrf.utils.db.example;
 import cn.lianrf.utils.db.annotation.Operator;
 import lombok.Data;
 
+import javax.persistence.Column;
 import java.util.List;
 
 /**
@@ -20,6 +21,13 @@ public class UserDto {
 
     @Operator
     private String testName="1231";
+
+    @Column(name = "he")
+    @Operator
+    private String hehe1;
+    @Column(name = "he")
+    @Operator()
+    private String hehe2;
 
     public String getTestName() {
         return "ggggg";
