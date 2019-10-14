@@ -4,6 +4,7 @@ import cn.lianrf.utils.db.annotation.Operator;
 import lombok.Data;
 
 import javax.persistence.Column;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -13,23 +14,18 @@ import java.util.List;
  */
 @Data
 public class UserDto {
-    @Operator
-    private String name;
 
-    @Operator(Operator.IN)
-    private List<String> ids;
 
-    @Operator
-    private String testName="1231";
+    @Column(name = "edit_time")
+    @Operator(Operator.LT)
+    private LocalDate hehe1=LocalDate.now();
 
-    @Column(name = "he")
-    @Operator
-    private String hehe1;
-    @Column(name = "he")
-    @Operator()
-    private String hehe2;
+    @Column(name = "edit_time")
+    @Operator(Operator.GTE)
+    private LocalDate hehe2=LocalDate.now();
 
-    public String getTestName() {
-        return "ggggg";
-    }
+
+    private String name="123123";
+
+
 }

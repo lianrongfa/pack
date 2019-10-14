@@ -23,16 +23,10 @@ import java.util.List;
  */
 public class s {
     public static void main(String[] args) throws IllegalAccessException {
-        Aa aa = new Aa("1", Arrays.asList("hehe","xixi"));
-        Bb bb = new Bb();
+        String s="<div class='easysite-news-text' id='easysiteText'>n     <p style='text-align: center;'><img alt='5' src='/customs/302249/302270/302272/2549120/2019072514260245426.jpg' title='5'></p><p></p> n   </div>";
 
-        HashMap<String, String> map = new HashMap<>();
-        map.put("s1","b1");
-        map.put("s2","b2");
-
-            BeanMap.map(aa,bb,map);
-            System.out.println();
-
+        boolean img = s.contains("img");
+        System.out.println(img);
 
     }
     static class Aa{
