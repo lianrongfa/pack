@@ -1,4 +1,4 @@
-package cn.lianrf.service.hystric;
+package cn.lianrf.service.hystrix;
 
 import cn.lianrf.service.SchedualServiceHi;
 import org.springframework.stereotype.Component;
