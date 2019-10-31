@@ -66,6 +66,7 @@ public class AppTest {
         Example example = new Example(TestEntity.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andCondition("name = ","fwe");
+        criteria.andBetween("age",1,10);
 
         List<TestEntity> testEntities = mapper.selectByExample(example);
         System.out.println(testEntities);
