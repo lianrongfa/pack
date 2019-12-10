@@ -1,6 +1,7 @@
 package cn.lianrf.utils.db.mongo;
 
 import cn.lianrf.utils.db.annotation.Operator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.query.Criteria;
 
 import java.lang.reflect.Field;
@@ -13,6 +14,7 @@ import java.util.Map;
  * @date: 2019/10/8
  * @author: lianrf
  */
+@Slf4j
 public enum OperatorCriteria {
     /**
      * 等于 默认方法
@@ -114,7 +116,13 @@ public enum OperatorCriteria {
         Field[] declaredFields = operatorClass.getDeclaredFields();
         for (Field field : declaredFields) {
             String key = field.getName();
-            OperatorCriteria value = valueOf(key);
+            OperatorCriteria value = null;
+            try {
+                value = valueOf(key);
+            } catch (IllegalArgumentException e) {
+                log.warn("key[{}]未匹配到操作，请检查是否需要添加",key);
+                continue;
+            }
             map.put(key, value);
             try {
                 Object o = field.get(Operator.class);
@@ -158,6 +166,12 @@ public enum OperatorCriteria {
     }
 
     public static void main(String[] args) {
+
+        try {
+            OperatorCriteria value = valueOf("123");
+        } catch (IllegalArgumentException e) {
+            log.warn("key[{}]未匹配到操作，请检查是否需要添加","123");
+        }
         System.out.println();
     }
 }

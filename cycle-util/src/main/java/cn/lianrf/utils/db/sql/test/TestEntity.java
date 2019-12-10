@@ -3,6 +3,8 @@ package cn.lianrf.utils.db.sql.test;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import javax.persistence.Table;
+
 /**
  * 用于测试mapper 与工具类无关
  * @version: v1.0

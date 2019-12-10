@@ -24,6 +24,7 @@
         <module>cycle-util</module>
         <module>zuul</module>
         <module>gateway</module>
+        <module>tesseract</module>
     </modules>
 
     <properties>
