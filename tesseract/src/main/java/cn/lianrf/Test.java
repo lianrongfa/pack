@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 
 /**
  * 图像识别
+ * 4.0训练方法：https://blog.csdn.net/qq_30110069/article/details/98742701#commentBox
  * @version: v1.0
  * @date: 2019/12/10
  * @author: lianrf
