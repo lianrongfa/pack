@@ -8,6 +8,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Paths;
 
 /**
+ * 图像识别
  * @version: v1.0
  * @date: 2019/12/10
  * @author: lianrf
