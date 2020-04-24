@@ -1,5 +1,7 @@
 package cn.lianrf.utils.db.sql.test;
 
+import cn.lianrf.utils.db.example.UserDto;
+import cn.lianrf.utils.db.sql.build.BuilderSqlCriteria;
 import cn.lianrf.utils.db.sql.test.TestEntity;
 import cn.lianrf.utils.db.sql.test.source.TestMapper;
 import cn.lianrf.utils.db.sql.test.tk.TKTestMapper;
@@ -17,6 +19,7 @@ import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.session.Configuration;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -26,7 +29,7 @@ import java.util.List;
  */
 public class AppTest {
     public static void main(String[] args) {
-        testTKMybatis();
+        testTKMybatis2();
     }
 
 
@@ -44,7 +47,32 @@ public class AppTest {
     /**
      * tk mybatis
      */
-    public static void testTKMybatis() {
+    public static void testTKMybatis1() {
+        TKTestMapper mapper = getTestMapper();
+
+        Example example = new Example(TestEntity.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andCondition("name = ","fwe");
+        criteria.andBetween("age",1,10);
+
+        List<TestEntity> testEntities = mapper.selectByExample(example);
+        System.out.println(testEntities);
+    }
+
+    /**
+     * tk mybatis
+     */
+    public static void testTKMybatis2() {
+        TKTestMapper mapper = getTestMapper();
+        UserDto userDto = new UserDto();
+        userDto.setName(Arrays.asList("123","213"));
+        Example example = BuilderSqlCriteria.of(userDto).build();
+
+        List<TestEntity> testEntities = mapper.selectByExample(example);
+        System.out.println(testEntities);
+    }
+
+    private static TKTestMapper getTestMapper() {
         Configuration configuration = new Configuration();
 
         DataSource dataSource = createDataSource();
@@ -61,15 +89,7 @@ public class AppTest {
         SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(configuration);
         SqlSession session = factory.openSession();
 
-        TKTestMapper mapper = session.getMapper(TKTestMapper.class);
-
-        Example example = new Example(TestEntity.class);
-        Example.Criteria criteria = example.createCriteria();
-        criteria.andCondition("name = ","fwe");
-        criteria.andBetween("age",1,10);
-
-        List<TestEntity> testEntities = mapper.selectByExample(example);
-        System.out.println(testEntities);
+        return session.getMapper(TKTestMapper.class);
     }
 
     private static SqlSession getSession() {

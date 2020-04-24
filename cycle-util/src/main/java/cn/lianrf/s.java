@@ -1,6 +1,7 @@
 package cn.lianrf;
 
 import cn.lianrf.utils.bean.BeanMap;
+import cn.lianrf.utils.db.annotation.Operator;
 import cn.lianrf.utils.poi.PoiUtils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -10,6 +11,7 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
@@ -23,11 +25,14 @@ import java.util.List;
  */
 public class s {
     public static void main(String[] args) throws IllegalAccessException {
-        String s="<div class='easysite-news-text' id='easysiteText'>n     <p style='text-align: center;'><img alt='5' src='/customs/302249/302270/302272/2549120/2019072514260245426.jpg' title='5'></p><p></p> n   </div>";
+        Class<Operator> operatorClass = Operator.class;
+        Field[] declaredFields = operatorClass.getDeclaredFields();
 
-        boolean img = s.contains("img");
-        System.out.println(img);
-
+        for (Field field : declaredFields) {
+            //field.setAccessible(true);
+            System.out.println(field.get(Operator.class));
+        }
+        System.out.println(Operator.GTE);
     }
     static class Aa{
         private String s1;

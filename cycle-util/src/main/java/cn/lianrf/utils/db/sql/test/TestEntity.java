@@ -2,6 +2,7 @@ package cn.lianrf.utils.db.sql.test;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Table;
 
@@ -13,6 +14,7 @@ import javax.persistence.Table;
  */
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class TestEntity {
     private String name;
     private Integer age;

@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import javax.persistence.Column;
+import javax.persistence.Transient;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 public class BuilderMongoCriteria extends BaseCriteria {
 
     /**
-     * 缓存操作符
+     * 缓存范围查找操作符
      */
     private static List<String> list = Arrays.asList(Operator.GT, Operator.GTE, Operator.LT, Operator.LTE);
 
@@ -47,13 +48,16 @@ public class BuilderMongoCriteria extends BaseCriteria {
         return new BuilderMongoCriteria(t);
     }
 
-    public Criteria createCriteria() {
+    public Criteria build() {
         Criteria criteria = new Criteria();
         Class clazz = getClazz();
         List<Field> fields = getFields();
         //用来标记field是否需要处理，在此集合中的不需要再次处理了
         HashSet<Field> mark = new HashSet<>();
         for (Field field : fields) {
+            //排查非映射字段
+            if (isTransient(field)) {continue;}
+
             Operator operator = field.getDeclaredAnnotation(Operator.class);
             if (mark.contains(field)) {
                 continue;
@@ -69,22 +73,20 @@ public class BuilderMongoCriteria extends BaseCriteria {
         return criteria;
     }
 
+
+
     /**
      * 处理Operator为空时
      * @param criteria criteria
      * @param field 字段
      */
     private void nullOperator(Criteria criteria, Field field) {
-        String fieldName = null;
-        Column column = field.getDeclaredAnnotation(Column.class);
-        if (column != null) {
-            fieldName = column.name();
-        } else {
-            fieldName = fieldNaming.getFieldName(field.getName());
-        }
+        String fieldName = getFieldName(field);
         Object value = FieldUtil.getFieldValueByName(field.getName(), getTarget());
         criteria.and(fieldName).is(value);
     }
+
+
 
     /**
      * 处理Operator不为空时
@@ -99,6 +101,8 @@ public class BuilderMongoCriteria extends BaseCriteria {
         if ("".equals(operaName)) {
             return;
         }
+        Object value = FieldUtil.getFieldValueByName(field.getName(), getTarget());
+        if(nullValue(operator,value)){return;}
         //处理字段名
         String fieldName = null;
         Column column = field.getDeclaredAnnotation(Column.class);
@@ -120,7 +124,6 @@ public class BuilderMongoCriteria extends BaseCriteria {
         } else {
             fieldName = fieldNaming.getFieldName(field.getName());
         }
-        Object value = FieldUtil.getFieldValueByName(field.getName(), getTarget());
         OperatorCriteria.get(operaName).operator(criteria,fieldName,value);
     }
 
@@ -157,7 +160,7 @@ public class BuilderMongoCriteria extends BaseCriteria {
 
 
     public static void main(String[] args) throws IllegalAccessException {
-        Criteria criteria = BuilderMongoCriteria.of(new UserDto()).createCriteria();
+        Criteria criteria = BuilderMongoCriteria.of(new UserDto()).build();
 
         Query query = new Query(criteria);
 
