@@ -40,22 +40,22 @@ public class DateParse {
         regexs.put(Pattern.compile("^([a-z|A-Z]{2,}\\s)([a-z|A-Z]{2,})(\\s{1})([0-9]{1,2},)(\\s{1})([1-2][\\d]{3})$"),
                 DateTimeFormatter.ofPattern("EEEE MMMM dd, yyyy", Locale.ENGLISH));
         //eg:20180608
-        regexs.put(Pattern.compile("^[1-2][\\d]{3}[0|1][0-9][0-3][0-9]$"),
+        regexs.put(Pattern.compile("^[1-2][\\d]{3}[01][0-9][0-3][0-9]$"),
                 DateTimeFormatter.ofPattern("yyyyMMdd"));
         //eg:2019年09月27日2018年11月5日 2018年11月9日
-        regexs.put(Pattern.compile("^[1-2][\\d]{3}年[0|1][0-9]月([0-3][0-9]|[1-9])日$"),
+        regexs.put(Pattern.compile("^[1-2][\\d]{3}年[01][0-9]月([0-3][0-9]|[1-9])日$"),
                 DateTimeFormatter.ofPattern("yyyy年M月d日"));
         //eg:2019年9月27日 2019年5月13日
         regexs.put(Pattern.compile("^[1-2][\\d]{3}年[1-9]?[1-2]?月([0-3][0-9]|[1-9])日$"),
                 DateTimeFormatter.ofPattern("yyyy年M月d日"));
         //eg:2019年9月7日
-        regexs.put(Pattern.compile("^(1|2){1}[\\d]{3}-(1){0,1}[0-9]{1}-(1|2|3){0,1}[0-9]{1}$"),
+        regexs.put(Pattern.compile("^([12]){1}[\\d]{3}-(1){0,1}[0-9]{1}-([1-3]){0,1}[0-9]{1}$"),
                 DateTimeFormatter.ofPattern("yyyy-M-d"));
         //eg:2019-09-27
-        regexs.put(Pattern.compile("^(1|2){1}[\\d]{3}-(0|1){1}[0-9]{1}-[0-3]{1}[0-9]{1}$"),
+        regexs.put(Pattern.compile("^([12]){1}[\\d]{3}-([01]){1}[0-9]{1}-[0-3]{1}[0-9]{1}$"),
                 DateTimeFormatter.ofPattern("yyyy-M-d"));
         //eg:2019-9-27
-        regexs.put(Pattern.compile("^(1|2){1}[\\d]{3}-(1){0,1}[0-9]{1}-(1|2|3){0,1}[0-9]{1}$"),
+        regexs.put(Pattern.compile("^([12]){1}[\\d]{3}-(1){0,1}[0-9]{1}-([1-3]){0,1}[0-9]{1}$"),
                 DateTimeFormatter.ofPattern("yyyy-M-d"));
         //eg:2019/03/15
         regexs.put(Pattern.compile("^[1-2][\\d]{3}/[0|1][0-9]/([0-3][0-9]|[1-9])$"),
