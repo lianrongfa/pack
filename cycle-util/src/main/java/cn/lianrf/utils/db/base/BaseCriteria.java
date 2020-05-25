@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Data
 public abstract class BaseCriteria {
-    private static final Map<Class, List<Field>> fieldCache=new ConcurrentHashMap<>(32);
+    private static final Map<Class, List<Field>> FIELD_CACHE =new ConcurrentHashMap<>(32);
     private Object target;
     private Class clazz;
     private List<Field> fields;
@@ -37,11 +37,11 @@ public abstract class BaseCriteria {
         Class<?> aClass = t.getClass();
         this.target=t;
         this.clazz=aClass;
-        List<Field> fields = fieldCache.get(aClass);
+        List<Field> fields = FIELD_CACHE.get(aClass);
         if(fields==null){
             fields = new ArrayList<>();
             FieldUtil.getDeclaredField(aClass, fields);
-            fieldCache.putIfAbsent(aClass,fields);
+            FIELD_CACHE.putIfAbsent(aClass,fields);
         }
         this.fields=fields;
         this.fieldNaming=new SnakeFieldNaming();
