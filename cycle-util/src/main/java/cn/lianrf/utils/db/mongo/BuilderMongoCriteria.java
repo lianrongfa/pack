@@ -1,9 +1,11 @@
 package cn.lianrf.utils.db.mongo;
 
 
+import cn.lianrf.utils.db.annotation.Like;
 import cn.lianrf.utils.db.annotation.Operator;
 import cn.lianrf.utils.db.base.BaseCriteria;
 import cn.lianrf.utils.db.example.UserDto;
+import cn.lianrf.utils.db.exception.AllocationException;
 import cn.lianrf.utils.reflect.FieldUtil;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -15,6 +17,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -39,7 +42,6 @@ public class BuilderMongoCriteria extends BaseCriteria {
     }
 
     /**
-     *
      * @param t
      * @param <T>
      * @return
@@ -56,8 +58,12 @@ public class BuilderMongoCriteria extends BaseCriteria {
         HashSet<Field> mark = new HashSet<>();
         for (Field field : fields) {
             //排查非映射字段
-            if (isTransient(field)) {continue;}
-
+            if (isTransient(field)) {
+                continue;
+            }
+            if (doLike(criteria, field)) {
+                continue;
+            }
             Operator operator = field.getDeclaredAnnotation(Operator.class);
             if (mark.contains(field)) {
                 continue;
@@ -73,12 +79,40 @@ public class BuilderMongoCriteria extends BaseCriteria {
         return criteria;
     }
 
+    private boolean doLike(Criteria criteria, Field field) {
+        Like like = field.getDeclaredAnnotation(Like.class);
+        if (like != null) {
+            Object value = FieldUtil.getFieldValueByName(field.getName(), getTarget());
+            if (Objects.isNull(value)) {
+                return true;
+            }
+            String valuePattern = value.toString();
+            String fieldName = getFieldName(field);
+            switch (like.value()) {
+                case Like.LEFT:
+                    valuePattern = ".*" + valuePattern;
+                    break;
+                case Like.RIGHT:
+                    valuePattern = valuePattern + ".*";
+                    break;
+                case Like.BOTH:
+                    valuePattern = ".*" + valuePattern + ".*";
+                    break;
+                default:
+                    throw new AllocationException("Like.value()类型错误");
+            }
+            criteria.and(fieldName).regex(Pattern.compile(valuePattern));
+            return true;
+        }
+        return false;
+    }
 
 
     /**
      * 处理Operator为空时
+     *
      * @param criteria criteria
-     * @param field 字段
+     * @param field    字段
      */
     private void nullOperator(Criteria criteria, Field field) {
         String fieldName = getFieldName(field);
@@ -87,13 +121,13 @@ public class BuilderMongoCriteria extends BaseCriteria {
     }
 
 
-
     /**
      * 处理Operator不为空时
+     *
      * @param criteria criteria
-     * @param clazz class
-     * @param mark 标示集合
-     * @param field 字段
+     * @param clazz    class
+     * @param mark     标示集合
+     * @param field    字段
      * @param operator operator
      */
     private void notNullOperator(Criteria criteria, Class clazz, HashSet<Field> mark, Field field, Operator operator) {
@@ -102,7 +136,9 @@ public class BuilderMongoCriteria extends BaseCriteria {
             return;
         }
         Object value = FieldUtil.getFieldValueByName(field.getName(), getTarget());
-        if(nullValue(operator,value)){return;}
+        if (nullValue(operator, value)) {
+            return;
+        }
         //处理字段名
         String fieldName = null;
         Column column = field.getDeclaredAnnotation(Column.class);
@@ -110,31 +146,32 @@ public class BuilderMongoCriteria extends BaseCriteria {
             fieldName = column.name();
             List<Field> list = FieldUtil.getFieldByColumn(column.name(), clazz, getFields());
             //size==2 说明查询为范围查询，因为mongo的范围查询需要单独处理
-            if(list.size()==2){
+            if (list.size() == 2) {
                 List<Field> tempList = list.stream().filter(item -> !item.equals(field)).collect(Collectors.toList());
                 Field tempField = tempList.get(0);
                 mark.add(tempField);
                 Operator tempOperator = tempField.getDeclaredAnnotation(Operator.class);
-                Objects.requireNonNull(tempOperator,"相同Column的Operator不能为空");
-                rangeCriteria(criteria,getTarget(),fieldName,field,operator,tempField,tempOperator);
+                Objects.requireNonNull(tempOperator, "相同Column的Operator不能为空");
+                rangeCriteria(criteria, getTarget(), fieldName, field, operator, tempField, tempOperator);
                 return;
-            }else if (list.size()>2){
+            } else if (list.size() > 2) {
                 throw new RuntimeException("如有多个相同名称column，请用数组或集合");
             }
         } else {
             fieldName = fieldNaming.getFieldName(field.getName());
         }
-        OperatorCriteria.get(operaName).operator(criteria,fieldName,value);
+        OperatorCriteria.get(operaName).operator(criteria, fieldName, value);
     }
 
     /**
      * 处理范围查询
-     * @param criteria criteria
-     * @param target 目标实例dto
-     * @param fieldName 字段名(db中字段名)
-     * @param field 类字段
-     * @param operator 操作符
-     * @param tempField 类字段
+     *
+     * @param criteria     criteria
+     * @param target       目标实例dto
+     * @param fieldName    字段名(db中字段名)
+     * @param field        类字段
+     * @param operator     操作符
+     * @param tempField    类字段
      * @param tempOperator 操作符
      */
     private void rangeCriteria(Criteria criteria, Object target, String fieldName,
@@ -167,7 +204,6 @@ public class BuilderMongoCriteria extends BaseCriteria {
         Criteria and = criteria.and("");
 
         System.out.println(query);
-
 
 
     }

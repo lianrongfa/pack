@@ -19,4 +19,5 @@ public class TestEntity {
     private String name;
     private Integer age;
 
+    private String title;
 }

@@ -1,6 +1,7 @@
 package cn.lianrf.utils.db.example;
 
 import cn.lianrf.utils.db.annotation.EntityClass;
+import cn.lianrf.utils.db.annotation.Like;
 import cn.lianrf.utils.db.annotation.Operator;
 import cn.lianrf.utils.db.sql.test.TestEntity;
 import lombok.Data;
@@ -37,4 +38,6 @@ public class UserDto{
     @Operator(Operator.IN)
     private List<String> name;
 
+    @Like(Like.RIGHT)
+    private String title="中国";
 }

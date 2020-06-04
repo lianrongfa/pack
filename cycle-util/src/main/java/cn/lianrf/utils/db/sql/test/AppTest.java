@@ -41,7 +41,7 @@ public class AppTest {
         SqlSession sqlSession = getSession();
         TestMapper mapper = sqlSession.getMapper(TestMapper.class);
         System.out.println(mapper.selectProvider1(123,"123"));
-        System.out.println(mapper.selectProvider2(new TestEntity("hehh",18)));
+        System.out.println(mapper.selectProvider2(new TestEntity("hehh",18,"1231vwehg")));
     }
 
     /**

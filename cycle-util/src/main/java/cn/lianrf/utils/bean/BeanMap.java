@@ -82,7 +82,7 @@ public abstract class BeanMap {
      * @param source
      */
     public static void randomBuild(Object source) {
-        String s = "odssOaeidlcoeodmnpariauefeedr kds eoesrls zr srr,r cno  echfnfp2eos sorpoOr if saoineisni e Erioh is";
+        String s = "中国纺织大跟我结婚我感觉我翻我牌假发票为佛教海明威明和破解后玩很久口味哦评价和贫困批发网";
         RandomStringUtils.randomAlphanumeric(50);
         Class<?> aClass = source.getClass();
         Field[] fields = aClass.getDeclaredFields();
