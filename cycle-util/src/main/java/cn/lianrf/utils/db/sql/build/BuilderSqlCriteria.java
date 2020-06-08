@@ -11,7 +11,6 @@ import tk.mybatis.mapper.entity.Example;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 /**
  * @version: v1.0
