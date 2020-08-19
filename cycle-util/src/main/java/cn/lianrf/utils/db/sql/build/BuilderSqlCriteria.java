@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ *
+ * 本功能基于tk-mybatis
+ *
  * @version: v1.0
  * @date: 2019/12/13
  * @author: lianrf

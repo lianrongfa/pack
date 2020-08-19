@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import javax.persistence.Column;
-import javax.persistence.Transient;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -21,6 +20,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
+ *
+ * 本功能基于spring data mongo实现
+ *
  * @version: v1.0
  * @date: 2019/9/18
  * @author: lianrf

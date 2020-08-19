@@ -19,8 +19,11 @@ public class Client {
     @Value("${server.port}")
     private String port;
 
+    @Value("${my-config}")
+    private String myConfig;
+
     @GetMapping("/hi")
     public String hello(@RequestParam("name") String name){
-        return "msg:"+name+"port is:"+port;
+        return "msg:"+name+"port is:"+port+"myConfig:"+myConfig;
     }
 }
